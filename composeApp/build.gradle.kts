@@ -1,12 +1,14 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinCocoapods)
 }
 
 kotlin {
@@ -27,6 +29,37 @@ kotlin {
             isStatic = true
         }
     }
+
+    cocoapods {
+        // Required properties
+        // Specify the required Pod version here. Otherwise, the Gradle project version is used.
+        version = "1.0"
+        summary = "Some description for a Kotlin/Native module"
+        homepage = "Link to a Kotlin/Native module homepage"
+
+        // Optional properties
+        // Configure the Pod name here instead of changing the Gradle project name
+        name = "MyCocoaPod"
+
+        framework {
+            // Required properties
+            // Framework name configuration. Use this property instead of deprecated 'frameworkName'
+            baseName = "MyFramework"
+
+            // Optional properties
+            // Specify the framework linking type. It's dynamic by default.
+            //isStatic = false
+            // Dependency export
+            //export(project(":anotherKMMModule"))
+            //transitiveExport = false // This is default.
+        }
+
+        // Maps custom Xcode configuration to NativeBuildType
+        xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
+        xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
+    }
+
+
     
     sourceSets {
         
