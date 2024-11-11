@@ -34,6 +34,7 @@ import baksotsel.composeapp.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.reynhart.baksotsel.ui.theme.primaryLight
 import org.reynhart.baksotsel.widgets.BaksoDropdown
+import org.reynhart.baksotsel.widgets.BaksoLoadingBox
 import org.reynhart.baksotsel.widgets.BaksoTextField
 
 @Composable
@@ -41,7 +42,7 @@ fun Login(navController: NavController){
     var nameTxt by remember { mutableStateOf("") }
     var dropdownValue by remember { mutableStateOf("") }
     var agreementChecked by remember { mutableStateOf(false) }
-
+    var isLoading by remember { mutableStateOf(false) }
     MaterialTheme {
         Column (
             modifier = Modifier.fillMaxHeight().padding(24.dp),
@@ -81,7 +82,8 @@ fun Login(navController: NavController){
                     HorizontalDivider(thickness = 2.dp)
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = {
-                        navController.navigate(route = "Main")
+                        isLoading=true
+//                        navController.navigate(route = "Main")
                     },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = nameTxt.trim() != "" && dropdownValue != "" && agreementChecked,
@@ -109,5 +111,8 @@ fun Login(navController: NavController){
 
 
         }
+            if(isLoading){
+                BaksoLoadingBox {  }
+            }
     }
 }

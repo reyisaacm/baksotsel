@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.reynhart.baksotsel.ui.theme.onPrimaryContainerLight
+import org.reynhart.baksotsel.ui.theme.onPrimaryLight
 import org.reynhart.baksotsel.ui.theme.primaryLight
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +56,7 @@ fun BaksoDropdown(
     if(isShowBottomSheet){
         ModalBottomSheet(onDismissRequest = {
             isShowBottomSheet=false
-        }, sheetState = modalSheetState ){
+        }, sheetState = modalSheetState, containerColor = onPrimaryContainerLight ){
             Column (modifier = Modifier.padding(16.dp)) {
                 dropdownMap.forEach { it ->
                     OutlinedButton(onClick = {
