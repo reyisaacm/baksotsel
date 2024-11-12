@@ -1,0 +1,9 @@
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org'
+
+target 'iosApp' do
+    use_frameworks!
+    platform :ios, '17.2'
+    pod 'composeApp', :path => '../composeApp'
+    pod 'GoogleMaps', '9.0.0'
+end

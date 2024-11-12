@@ -41,19 +41,24 @@ kotlin {
 
         // Optional properties
         // Configure the Pod name here instead of changing the Gradle project name
-        name = "MyCocoaPod"
+        podfile = project.file("../iosApp/Podfile")
+        ios.deploymentTarget = "17.2"
 
         framework {
             // Required properties
             // Framework name configuration. Use this property instead of deprecated 'frameworkName'
-            baseName = "MyFramework"
+            baseName = "composeApp"
 
             // Optional properties
             // Specify the framework linking type. It's dynamic by default.
-            //isStatic = false
+            isStatic = true
             // Dependency export
             //export(project(":anotherKMMModule"))
             //transitiveExport = false // This is default.
+        }
+
+        pod("GoogleMaps"){
+            extraOpts += listOf("-compiler-option", "-fmodules")
         }
 
         // Maps custom Xcode configuration to NativeBuildType

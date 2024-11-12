@@ -1,5 +1,5 @@
 Pod::Spec.new do |spec|
-    spec.name                     = 'MyCocoaPod'
+    spec.name                     = 'composeApp'
     spec.version                  = '1.0'
     spec.homepage                 = 'Link to a Kotlin/Native module homepage'
     spec.source                   = { :http=> ''}
@@ -33,7 +33,7 @@ Pod::Spec.new do |spec|
                 
     spec.script_phases = [
         {
-            :name => 'Build MyCocoaPod',
+            :name => 'Build composeApp',
             :execution_position => :before_compile,
             :shell_path => '/bin/sh',
             :script => <<-SCRIPT
