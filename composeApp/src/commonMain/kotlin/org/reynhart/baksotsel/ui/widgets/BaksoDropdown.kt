@@ -1,4 +1,4 @@
-package org.reynhart.baksotsel.widgets
+package org.reynhart.baksotsel.ui.widgets
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

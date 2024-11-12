@@ -1,4 +1,4 @@
-package org.reynhart.baksotsel.widgets
+package org.reynhart.baksotsel.ui.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape

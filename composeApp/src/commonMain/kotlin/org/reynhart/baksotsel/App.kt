@@ -3,13 +3,21 @@ import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.koin.compose.KoinApplication
+import org.reynhart.baksotsel.di.sharedModule
 import org.reynhart.baksotsel.ui.screen.Login
 import org.reynhart.baksotsel.ui.screen.Main
 
 
 @Composable
 fun App() {
-    NavigationRoutes()
+    KoinApplication(application = {
+        sharedModule
+    }){
+        NavigationRoutes()
+
+    }
+
 }
 
 @Composable

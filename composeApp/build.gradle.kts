@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.kotlinPluginSerialization)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
@@ -79,6 +80,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.navigation.compose)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.xxfast.kstore)
+            implementation(libs.xxfast.kstore.file)
         }
     }
 }

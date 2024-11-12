@@ -33,9 +33,9 @@ import baksotsel.composeapp.generated.resources.Res
 import baksotsel.composeapp.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.reynhart.baksotsel.ui.theme.primaryLight
-import org.reynhart.baksotsel.widgets.BaksoDropdown
-import org.reynhart.baksotsel.widgets.BaksoLoadingBox
-import org.reynhart.baksotsel.widgets.BaksoTextField
+import org.reynhart.baksotsel.ui.widgets.BaksoDropdown
+import org.reynhart.baksotsel.ui.widgets.BaksoLoadingBox
+import org.reynhart.baksotsel.ui.widgets.BaksoTextField
 
 @Composable
 fun Login(navController: NavController){
