@@ -3,5 +3,6 @@ package org.reynhart.baksotsel.data.interfaces.repository
 import org.reynhart.baksotsel.models.LoginUserModel
 
 interface IStorageRepository {
-    fun storeData(data: LoginUserModel)
+    suspend fun storeUserData(data: LoginUserModel)
+    suspend fun getUserData():LoginUserModel?
 }

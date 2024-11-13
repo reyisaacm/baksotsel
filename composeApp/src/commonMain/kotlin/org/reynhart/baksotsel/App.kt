@@ -4,6 +4,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.KoinApplication
+import org.koin.compose.KoinContext
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.koinApplication
+import org.koin.dsl.module
+import org.reynhart.baksotsel.data.dataProvider.KStoreStorage
+import org.reynhart.baksotsel.data.interfaces.dataProvider.ILocalStorage
+import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
+import org.reynhart.baksotsel.data.repository.StorageRepository
 import org.reynhart.baksotsel.di.sharedModule
 import org.reynhart.baksotsel.ui.screen.Login
 import org.reynhart.baksotsel.ui.screen.Main
@@ -11,13 +19,11 @@ import org.reynhart.baksotsel.ui.screen.Main
 
 @Composable
 fun App() {
-    KoinApplication(application = {
-        sharedModule
-    }){
+    KoinContext(context = koinApplication {
+        modules(sharedModule)
+    }.koin) {
         NavigationRoutes()
-
     }
-
 }
 
 @Composable

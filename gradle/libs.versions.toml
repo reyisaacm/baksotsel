@@ -40,10 +40,10 @@ koin-core = { module = "io.insert-koin:koin-core" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
 koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation" }
+koin-android = { module = "io.insert-koin:koin-android" }
 kotlinx-serialization-json = {module="org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref="kotlinx-json"}
 xxfast-kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 xxfast-kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
-
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -8,7 +8,11 @@ class StorageRepository(
     private val storageProvider: ILocalStorage
 ): IStorageRepository {
 
-    override fun storeData(data: LoginUserModel) {
+    override suspend fun storeUserData(data: LoginUserModel) {
         storageProvider.setUserData(data)
+    }
+
+    override suspend fun getUserData(): LoginUserModel? {
+        return storageProvider.getUserData()
     }
 }

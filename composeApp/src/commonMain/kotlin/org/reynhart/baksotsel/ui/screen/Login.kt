@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,18 +32,24 @@ import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import baksotsel.composeapp.generated.resources.Res
 import baksotsel.composeapp.generated.resources.logo
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
+import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
+import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.ui.theme.primaryLight
 import org.reynhart.baksotsel.ui.widgets.BaksoDropdown
 import org.reynhart.baksotsel.ui.widgets.BaksoLoadingBox
 import org.reynhart.baksotsel.ui.widgets.BaksoTextField
 
 @Composable
-fun Login(navController: NavController){
+fun Login(navController: NavController, storageRepository: IStorageRepository = koinInject()){
     var nameTxt by remember { mutableStateOf("") }
     var dropdownValue by remember { mutableStateOf("") }
     var agreementChecked by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+
     MaterialTheme {
         Column (
             modifier = Modifier.fillMaxHeight().padding(24.dp),
@@ -83,7 +90,14 @@ fun Login(navController: NavController){
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = {
                         isLoading=true
-//                        navController.navigate(route = "Main")
+
+                        val userModel = LoginUserModel(name = nameTxt, type=dropdownValue, currentCoordinateLat = "-6.032", currentCoordinateLong = "0.1235")
+                        scope.launch {
+                            storageRepository.storeUserData(userModel)
+                            val retrievedUserModel = storageRepository.getUserData()
+                            println(retrievedUserModel)
+                        }
+//                      navController.navigate(route = "Main")
                     },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = nameTxt.trim() != "" && dropdownValue != "" && agreementChecked,
