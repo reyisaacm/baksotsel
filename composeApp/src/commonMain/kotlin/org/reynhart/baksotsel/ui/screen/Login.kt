@@ -91,13 +91,13 @@ fun Login(navController: NavController, storageRepository: IStorageRepository = 
                     Button(onClick = {
                         isLoading=true
 
-                        val userModel = LoginUserModel(name = nameTxt, type=dropdownValue, currentCoordinateLat = "-6.032", currentCoordinateLong = "0.1235")
-                        scope.launch {
-                            storageRepository.storeUserData(userModel)
-                            val retrievedUserModel = storageRepository.getUserData()
-                            println(retrievedUserModel)
-                        }
-//                      navController.navigate(route = "Main")
+//                        val userModel = LoginUserModel(name = nameTxt, type=dropdownValue, currentCoordinateLat = "-6.032", currentCoordinateLong = "0.1235")
+//                        scope.launch {
+//                            storageRepository.storeUserData(userModel)
+//                            val retrievedUserModel = storageRepository.getUserData()
+//                            println(retrievedUserModel)
+//                        }
+                      navController.navigate(route = "Main")
                     },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = nameTxt.trim() != "" && dropdownValue != "" && agreementChecked,
