@@ -15,4 +15,10 @@ class StorageRepository(
     override suspend fun getUserData(): LoginUserModel? {
         return storageProvider.getUserData()
     }
+
+    override suspend fun clearUserData() {
+        storageProvider.clearUserData()
+    }
+
+
 }

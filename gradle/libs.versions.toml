@@ -19,6 +19,7 @@ androidGoogleMap = "4.3.0"
 koin-bom = "4.0.0"
 kstore = "0.9.1"
 kotlinx-json = "1.7.3"
+androidx-startup = "1.2.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -44,6 +45,7 @@ koin-android = { module = "io.insert-koin:koin-android" }
 kotlinx-serialization-json = {module="org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref="kotlinx-json"}
 xxfast-kstore = { module = "io.github.xxfast:kstore", version.ref = "kstore" }
 xxfast-kstore-file = { module = "io.github.xxfast:kstore-file", version.ref = "kstore" }
+androidx-startup-runtime = {module="androidx.startup:startup-runtime", version.ref = "androidx-startup"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

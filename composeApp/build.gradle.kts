@@ -75,6 +75,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.android.googleMap)
             implementation(libs.koin.android)
+            implementation(libs.androidx.startup.runtime)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

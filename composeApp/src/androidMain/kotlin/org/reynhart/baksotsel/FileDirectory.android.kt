@@ -6,5 +6,5 @@ import org.koin.compose.getKoin
 
 actual fun getFileDirectory(): String {
 
-    return ""
+    return AppContext.get().applicationInfo.dataDir
 }
