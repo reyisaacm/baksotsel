@@ -35,20 +35,29 @@ import baksotsel.composeapp.generated.resources.logo
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
 import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.ui.theme.primaryLight
 import org.reynhart.baksotsel.ui.widgets.BaksoDropdown
 import org.reynhart.baksotsel.ui.widgets.BaksoLoadingBox
 import org.reynhart.baksotsel.ui.widgets.BaksoTextField
+import org.reynhart.baksotsel.viewmodels.LoginViewModel
+import org.reynhart.baksotsel.viewmodels.states.LoginStates
 
 @Composable
-fun Login(navController: NavController, storageRepository: IStorageRepository = koinInject()){
+fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
     var nameTxt by remember { mutableStateOf("") }
     var dropdownValue by remember { mutableStateOf("") }
     var agreementChecked by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
+    val eventState by vm.eventState
+
+    if(eventState == LoginStates.Loading){
+        isLoading = true
+    } else if(eventState == LoginStates.Success){
+        navController.navigate(route = "Main")
+    }
 
     MaterialTheme {
         Column (
@@ -89,13 +98,8 @@ fun Login(navController: NavController, storageRepository: IStorageRepository = 
                     HorizontalDivider(thickness = 2.dp)
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = {
-                        isLoading=true
-
                         val userModel = LoginUserModel(name = nameTxt, type=dropdownValue, currentCoordinateLat = "-6.032", currentCoordinateLong = "0.1235")
-                        scope.launch {
-                            storageRepository.storeUserData(userModel)
-                            navController.navigate(route = "Main")
-                        }
+                        vm.onJoinClick(userModel)
                     },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = nameTxt.trim() != "" && dropdownValue != "" && agreementChecked,
