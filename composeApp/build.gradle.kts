@@ -76,6 +76,7 @@ kotlin {
             implementation(libs.android.googleMap)
             implementation(libs.koin.android)
             implementation(libs.androidx.startup.runtime)
+            implementation(libs.gms.play.services.location)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -95,6 +96,10 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.xxfast.kstore)
             implementation(libs.xxfast.kstore.file)
+            implementation(libs.dev.icerock.moko.permission.compose)
+
+        }
+        iosMain.dependencies {
         }
     }
 }

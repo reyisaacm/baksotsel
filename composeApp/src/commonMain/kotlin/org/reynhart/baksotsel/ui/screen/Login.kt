@@ -32,6 +32,13 @@ import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import baksotsel.composeapp.generated.resources.Res
 import baksotsel.composeapp.generated.resources.logo
+import dev.icerock.moko.permissions.DeniedAlwaysException
+import dev.icerock.moko.permissions.DeniedException
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionsController
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -58,6 +65,11 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
     } else if(eventState == LoginStates.Success){
         navController.navigate(route = "Main")
     }
+
+    val factory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
+    val controller: PermissionsController = remember(factory) { factory.createPermissionsController() }
+    BindEffect(controller)
+    val coroutineScope = rememberCoroutineScope()
 
     MaterialTheme {
         Column (
@@ -99,7 +111,17 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = {
                         val userModel = LoginUserModel(name = nameTxt, type=dropdownValue, currentCoordinateLat = "-6.032", currentCoordinateLong = "0.1235")
-                        vm.onJoinClick(userModel)
+//                        vm.onJoinClick(userModel)
+                        coroutineScope.launch {
+                            try {
+                                controller.providePermission(Permission.LOCATION)
+                                // Permission has been granted successfully.
+                            } catch(deniedAlways: DeniedAlwaysException) {
+                                // Permission is always denied.
+                            } catch(denied: DeniedException) {
+                                // Permission was denied.
+                            }
+                        }
                     },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = nameTxt.trim() != "" && dropdownValue != "" && agreementChecked,
