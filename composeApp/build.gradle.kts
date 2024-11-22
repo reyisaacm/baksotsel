@@ -42,7 +42,7 @@ kotlin {
         // Optional properties
         // Configure the Pod name here instead of changing the Gradle project name
         podfile = project.file("../iosApp/Podfile")
-        ios.deploymentTarget = "17.2"
+        ios.deploymentTarget = "15.3"
 
         framework {
             // Required properties
@@ -61,7 +61,7 @@ kotlin {
             extraOpts += listOf("-compiler-option", "-fmodules")
         }
 
-        // Maps custom Xcode configuration to NativeBuildType
+//        // Maps custom Xcode configuration to NativeBuildType
         xcodeConfigurationToNativeBuildType["CUSTOM_DEBUG"] = NativeBuildType.DEBUG
         xcodeConfigurationToNativeBuildType["CUSTOM_RELEASE"] = NativeBuildType.RELEASE
     }
