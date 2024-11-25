@@ -17,9 +17,12 @@ internal object AppContext {
     }
 }
 
+internal lateinit var applicationContext: Context
+
 internal class AppContextInitializer: Initializer<Context>{
     override fun create(context: Context): Context {
         AppContext.setUp(context.applicationContext)
+        applicationContext = context.applicationContext
         return AppContext.get()
     }
     override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()

@@ -44,6 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
+import org.reynhart.baksotsel.getCurrentLocation
 import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.ui.theme.primaryLight
 import org.reynhart.baksotsel.ui.widgets.BaksoDropdown
@@ -115,7 +116,11 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
                         coroutineScope.launch {
                             try {
                                 controller.providePermission(Permission.LOCATION)
-                                // Permission has been granted successfully.
+                                getCurrentLocation().collect{ result ->
+                                    println("Latitude: ${result.latitude}")
+                                    println("Longitude: ${result.longitude}")
+                                }
+
                             } catch(deniedAlways: DeniedAlwaysException) {
                                 // Permission is always denied.
                             } catch(denied: DeniedException) {
