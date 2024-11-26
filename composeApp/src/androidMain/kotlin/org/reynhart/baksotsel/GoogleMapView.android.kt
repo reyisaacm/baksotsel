@@ -13,16 +13,21 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import kotlinx.coroutines.flow.Flow
+import org.reynhart.baksotsel.models.LoginUserModel
 
 @Composable
-actual fun GoogleMapView() {
+actual fun GoogleMapView(
+    currentLoc: Flow<LoginUserModel>
+) {
 
-    val latLng: LatLng = LatLng(-6.2274808, 106.8160314)
+    val latLng: LatLng = LatLng(0.0, 0.0)
 
     val cameraPositionState = rememberCameraPositionState {
         latLng.let { position = CameraPosition.fromLatLngZoom(it, 15f) }

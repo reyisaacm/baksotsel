@@ -2,6 +2,7 @@ package org.reynhart.baksotsel
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.viewinterop.UIKitView
 import cocoapods.GoogleMaps.GMSAdvancedMarker.Companion.markerImageWithColor
 import cocoapods.GoogleMaps.GMSCameraPosition
@@ -9,12 +10,16 @@ import cocoapods.GoogleMaps.GMSMapView
 import cocoapods.GoogleMaps.GMSMapView.Companion.mapWithFrame
 import cocoapods.GoogleMaps.GMSMarker
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.coroutines.flow.Flow
+import org.reynhart.baksotsel.models.LoginUserModel
 import platform.CoreLocation.CLLocationCoordinate2DMake
 import platform.UIKit.UIColor
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
-actual fun GoogleMapView(){
+actual fun GoogleMapView(
+    currentLoc: Flow<LoginUserModel>
+){
 
     UIKitView(
         factory = {

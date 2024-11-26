@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
 import org.reynhart.baksotsel.getCurrentLocation
 import org.reynhart.baksotsel.models.LoginUserModel
@@ -22,7 +24,7 @@ class LoginViewModel(private val storageRepository: IStorageRepository): ViewMod
         _eventState.value = LoginStates.Loading
         viewModelScope.launch {
             getCurrentLocation().collect{
-                val userModel :LoginUserModel = LoginUserModel(name=name, type=type, currentCoordinateLat =it.latitude, currentCoordinateLong = it.longitude )
+                val userModel :LoginUserModel = LoginUserModel(id=null,name=name, type=type, currentCoordinateLat =it.latitude, currentCoordinateLong = it.longitude, lastUpdate = Clock.System.now())
                 storageRepository.storeUserData(userModel)
                 _eventState.value = LoginStates.Success
             }

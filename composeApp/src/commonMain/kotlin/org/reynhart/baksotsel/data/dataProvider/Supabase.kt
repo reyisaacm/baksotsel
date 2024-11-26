@@ -18,6 +18,6 @@ class Supabase: IDbStorage {
     }
 
     override suspend fun storeData(data: LoginUserModel){
-        supabase.from("user").insert(data)
+        supabase.from("user_test").insert(data)
     }
 }
