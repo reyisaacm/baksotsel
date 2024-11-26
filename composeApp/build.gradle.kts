@@ -77,6 +77,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.androidx.startup.runtime)
             implementation(libs.gms.play.services.location)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -97,9 +98,12 @@ kotlin {
             implementation(libs.xxfast.kstore)
             implementation(libs.xxfast.kstore.file)
             implementation(libs.dev.icerock.moko.permission.compose)
+            implementation(libs.supabase.postgres)
+            implementation(libs.supabase.realtime)
 
         }
         iosMain.dependencies {
+            implementation(libs.ktor.client.ios)
         }
     }
 }

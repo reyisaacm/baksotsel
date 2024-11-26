@@ -30,13 +30,15 @@ import org.reynhart.baksotsel.ui.theme.primaryLight
 fun BaksoDialog(
     message: String,
     itemMap: List<DialogModel>,
-    onSelectedItem: (String)-> Unit
+    onSelectedItem: (String)-> Unit,
+    onDismissDialogBox: ()-> Unit
 ){
     var isShowBottomSheet by remember { mutableStateOf(false) }
     val modalSheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(onDismissRequest = {
         isShowBottomSheet=false
+        onDismissDialogBox()
     }, sheetState = modalSheetState, containerColor = onPrimaryContainerLight ){
         Column (modifier = Modifier.padding(16.dp)) {
             Text(text=message, fontSize =16.sp, textAlign = TextAlign.Center)

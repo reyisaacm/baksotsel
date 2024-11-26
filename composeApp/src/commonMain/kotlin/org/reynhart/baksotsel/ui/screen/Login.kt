@@ -45,8 +45,10 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
 import org.reynhart.baksotsel.getCurrentLocation
+import org.reynhart.baksotsel.models.DialogModel
 import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.ui.theme.primaryLight
+import org.reynhart.baksotsel.ui.widgets.BaksoDialog
 import org.reynhart.baksotsel.ui.widgets.BaksoDropdown
 import org.reynhart.baksotsel.ui.widgets.BaksoLoadingBox
 import org.reynhart.baksotsel.ui.widgets.BaksoTextField
@@ -60,6 +62,7 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
     var agreementChecked by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
     val eventState by vm.eventState
+    var isPermissionDenied by remember { mutableStateOf(false) }
 
     if(eventState == LoginStates.Loading){
         isLoading = true
@@ -71,6 +74,7 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
     val controller: PermissionsController = remember(factory) { factory.createPermissionsController() }
     BindEffect(controller)
     val coroutineScope = rememberCoroutineScope()
+
 
     MaterialTheme {
         Column (
@@ -111,20 +115,15 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
                     HorizontalDivider(thickness = 2.dp)
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = {
-                        val userModel = LoginUserModel(name = nameTxt, type=dropdownValue, currentCoordinateLat = "-6.032", currentCoordinateLong = "0.1235")
-//                        vm.onJoinClick(userModel)
+                        isPermissionDenied = false
                         coroutineScope.launch {
                             try {
                                 controller.providePermission(Permission.LOCATION)
-                                getCurrentLocation().collect{ result ->
-                                    println("Latitude: ${result.latitude}")
-                                    println("Longitude: ${result.longitude}")
-                                }
-
+                                vm.onJoinClick(name=nameTxt, type=dropdownValue)
                             } catch(deniedAlways: DeniedAlwaysException) {
-                                // Permission is always denied.
+                                isPermissionDenied = true
                             } catch(denied: DeniedException) {
-                                // Permission was denied.
+                                isPermissionDenied = true
                             }
                         }
                     },
@@ -156,6 +155,21 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
         }
             if(isLoading){
                 BaksoLoadingBox {  }
+            }
+            if(isPermissionDenied){
+                val dialogOptions = listOf<DialogModel>(
+                    DialogModel(label="OK", value = "ok", isPrimaryColor = true),
+                )
+                BaksoDialog(
+                    "Untuk menggunakan aplikasi ini, harap mengizinkan lokasi di perangkat anda",
+                    itemMap = dialogOptions,
+                    onSelectedItem ={ it ->
+                            isPermissionDenied = false
+                    },
+                    onDismissDialogBox = {
+                        isPermissionDenied = false
+                    }
+                )
             }
     }
 }

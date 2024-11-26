@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
+import org.reynhart.baksotsel.getCurrentLocation
 import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.viewmodels.states.LoginStates
 
@@ -17,11 +18,15 @@ class LoginViewModel(private val storageRepository: IStorageRepository): ViewMod
 
     }
 
-    fun onJoinClick(userModel: LoginUserModel){
+    fun onJoinClick(name: String, type: String){
         _eventState.value = LoginStates.Loading
         viewModelScope.launch {
-            storageRepository.storeUserData(userModel)
-            _eventState.value = LoginStates.Success
+            getCurrentLocation().collect{
+                val userModel :LoginUserModel = LoginUserModel(name=name, type=type, currentCoordinateLat =it.latitude, currentCoordinateLong = it.longitude )
+                storageRepository.storeUserData(userModel)
+                _eventState.value = LoginStates.Success
+            }
+
         }
     }
 }

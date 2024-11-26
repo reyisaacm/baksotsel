@@ -60,6 +60,7 @@ fun Main(navController: NavController,  storageRepository: IStorageRepository = 
         BaksoDialog(
             "Dengan menutup halaman ini anda akan kembali ke halaman login",
             itemMap = dialogOptions,
+            onDismissDialogBox = {},
             onSelectedItem ={ it ->
                 if(it == "ok"){
                     scope.launch {
