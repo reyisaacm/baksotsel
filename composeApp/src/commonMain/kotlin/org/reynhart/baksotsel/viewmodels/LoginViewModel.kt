@@ -12,6 +12,8 @@ import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
 import org.reynhart.baksotsel.getCurrentLocation
 import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.viewmodels.states.LoginStates
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class LoginViewModel(private val storageRepository: IStorageRepository): ViewModel(){
     private var _eventState : MutableState<LoginStates> = mutableStateOf(LoginStates.Init)
@@ -20,11 +22,12 @@ class LoginViewModel(private val storageRepository: IStorageRepository): ViewMod
 
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     fun onJoinClick(name: String, type: String){
         _eventState.value = LoginStates.Loading
         viewModelScope.launch {
             getCurrentLocation().collect{
-                val userModel :LoginUserModel = LoginUserModel(id=null,name=name, type=type, currentCoordinateLat =it.latitude, currentCoordinateLong = it.longitude, lastUpdate = Clock.System.now())
+                val userModel :LoginUserModel = LoginUserModel(id=Uuid.random().toString() ,name=name, type=type, currentCoordinateLat =it.latitude, currentCoordinateLong = it.longitude, lastUpdate = Clock.System.now())
                 storageRepository.storeUserData(userModel)
                 _eventState.value = LoginStates.Success
             }

@@ -1,5 +1,6 @@
 package org.reynhart.baksotsel
 
+import android.location.Location
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -13,22 +14,26 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import org.reynhart.baksotsel.models.LocationModel
 import org.reynhart.baksotsel.models.LoginUserModel
 
 @Composable
 actual fun GoogleMapView(
     currentLoc: Flow<LoginUserModel>
 ) {
-
-    val latLng: LatLng = LatLng(0.0, 0.0)
-
+    val latLng: LatLng = LatLng(-6.2306647, 106.8148273)
     val cameraPositionState = rememberCameraPositionState {
         latLng.let { position = CameraPosition.fromLatLngZoom(it, 15f) }
     }
@@ -41,20 +46,35 @@ actual fun GoogleMapView(
         )
     }
 
+    val markerList = mutableListOf<LocationModel>()
+
+    LaunchedEffect(true){
+        currentLoc.collect{
+            markerList.add(LocationModel(
+                latitude = it.currentCoordinateLat,
+                longitude = it.currentCoordinateLong
+            ))
+        }
+    }
+
+
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState,
         uiSettings = mapUiSettings
     ) {
 
-        Marker(
-            state = MarkerState(
-                position = LatLng(-6.2306647, 106.8148273)
-            ),
-            title = "Telkomsel Smart Office",
-            snippet = "Test Snippet",
-        )
+        }
+        markerList.forEach{
+            Marker(
+                state = MarkerState(
+                    position = LatLng(it.latitude, it.longitude)
+                ),
+                title = "Telkomsel Smart Office",
+                snippet = "Test Snippet",
+            )
+        }
 
-    }
+
 
 }

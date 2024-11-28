@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class LoginUserModel(
-    val id: Int?,
+    val id: String,
     val name: String,
     val type: String,
     val currentCoordinateLat: Double,
