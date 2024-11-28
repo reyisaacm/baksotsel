@@ -38,6 +38,7 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
     fun onLogoutClick(){
         viewModelScope.launch {
             storageRepository.clearUserData()
+            _eventState.value = MainStates.Clear
         }
 
     }
