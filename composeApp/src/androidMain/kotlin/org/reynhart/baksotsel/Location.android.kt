@@ -15,10 +15,10 @@ actual suspend fun getCurrentLocation(): Flow<LocationModel> {
         val client = LocationServices.getFusedLocationProviderClient(applicationContext)
         client.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY,null).addOnSuccessListener {
             if(it != null){
-                this@callbackFlow.trySend(LocationModel(it.latitude,it.longitude))
+                this@callbackFlow.trySend(LocationModel(id="",latitude=it.latitude,longitude=it.longitude))
                 close()
             } else {
-                this@callbackFlow.trySend(LocationModel(0.0,0.0))
+                this@callbackFlow.trySend(LocationModel(id="",latitude=0.0,longitude=0.0))
                 close()
             }
         }

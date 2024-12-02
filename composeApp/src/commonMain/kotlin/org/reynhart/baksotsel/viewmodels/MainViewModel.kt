@@ -5,9 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
 import org.reynhart.baksotsel.models.DialogModel
 import org.reynhart.baksotsel.models.LoginUserModel
@@ -25,13 +27,31 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
 
     init {
         viewModelScope.launch {
-            val retrievedUserModel = storageRepository.getUserData()
-            if(retrievedUserModel != null){
-                loginData = flow{
-                    emit(retrievedUserModel)
+            try {
+                val retrievedUserModel = storageRepository.getUserData()
+                if(retrievedUserModel != null){
+                    loginData = flow{
+                        while (true){
+                            emit(retrievedUserModel)
+                            delay(15000)
+                            val newModel = LoginUserModel(
+                                id="test123",
+                                name="test",
+                                type="c",
+                                currentCoordinateLat = -6.224489,
+                                currentCoordinateLong = 106.7999732,
+                                lastUpdate = Clock.System.now()
+                            )
+                            emit(newModel)
+                        }
+
+                    }
                     _eventState.value = MainStates.MapLoaded
                 }
+            }catch (e: Exception){
+
             }
+
         }
     }
 
