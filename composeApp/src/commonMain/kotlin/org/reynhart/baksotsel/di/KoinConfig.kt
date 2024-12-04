@@ -12,6 +12,7 @@ import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
 import org.reynhart.baksotsel.data.repository.StorageRepository
 import org.reynhart.baksotsel.viewmodels.LoginViewModel
 import org.reynhart.baksotsel.viewmodels.MainViewModel
+import org.reynhart.baksotsel.viewmodels.SplashViewModel
 
 val sharedModule= module {
     single<ILocalStorage>{KStoreStorage()}
@@ -21,5 +22,6 @@ val sharedModule= module {
 
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }
+    viewModel { SplashViewModel(get()) }
 
 }

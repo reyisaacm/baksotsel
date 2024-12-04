@@ -67,7 +67,9 @@ fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
     if(eventState == LoginStates.Loading){
         isLoading = true
     } else if(eventState == LoginStates.Success){
-        navController.navigate(route = "Main")
+        navController.navigate(route = "Main"){
+            popUpTo("Login",{inclusive=true})
+        }
     }
 
     val factory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
