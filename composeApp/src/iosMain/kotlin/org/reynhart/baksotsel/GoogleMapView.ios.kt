@@ -25,7 +25,7 @@ actual fun GoogleMapView(
 
     UIKitView(
         factory = {
-            val camera: GMSCameraPosition? =
+            val camera: GMSCameraPosition=
                 GMSCameraPosition.cameraWithLatitude(
                     latitude = -6.2274808,
                     longitude = 106.8160314,
@@ -34,7 +34,8 @@ actual fun GoogleMapView(
 
 
             val mapView =  GMSMapView()
-            camera?.let { mapWithFrame(frame = mapView.frame, camera = it) }
+            //camera?.let { mapWithFrame(frame = mapView.frame, camera = it) }
+            mapView.camera=camera
             mapView.settings.zoomGestures = true
             mapView.settings.consumesGesturesInView = true
 
@@ -48,6 +49,19 @@ actual fun GoogleMapView(
                     markerImageWithColor(UIColor.redColor)
 //                    this.markerImageWithColor(color = UIColor.redColor)
                 }.map = mapView
+
+            GMSMarker().apply {
+                this.position = CLLocationCoordinate2DMake(
+                    latitude = -6.2273296,
+                    longitude = 106.82942
+                )
+                this.title = "Telkomsel Smart Office"
+                this.snippet = "Test Snippet"
+                markerImageWithColor(UIColor.redColor)
+//                    this.markerImageWithColor(color = UIColor.redColor)
+            }.map = mapView
+
+
 
             mapView
         },
