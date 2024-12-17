@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -54,7 +58,7 @@ actual fun GoogleMapView(
 
     val markerList = remember{mutableStateListOf<LocationModel>()}
 
-    LaunchedEffect(true){
+    LaunchedEffect(Unit){
             currentLoc.collect{
                 val isAlreadyExist = markerList.firstOrNull{x-> x.id == it.id} != null
                 if(!isAlreadyExist){
@@ -68,6 +72,11 @@ actual fun GoogleMapView(
 
     }
 
+//    LaunchedEffect(markerStateList.count()){
+//        println(markerStateList)
+//    }
+
+
 
 
     GoogleMap(
@@ -76,28 +85,29 @@ actual fun GoogleMapView(
         uiSettings = mapUiSettings
     ) {
         markerList.forEach{
+            val markerState = MarkerState(
+                position = LatLng(it.latitude, it.longitude)
+            )
+
             Marker(
-                state = rememberMarkerState(
-                    key=it.id,
-                    position = LatLng(it.latitude, it.longitude)
-                ),
+                state = markerState,
                 title = "Telkomsel Smart Office",
                 snippet = "Test Snippet",
             )
-//            MarkerComposable(
-//                state = rememberMarkerState(
-//                    key=it.id,
-//                    position = LatLng(it.latitude, it.longitude)
-//                ),
-//                title = "Telkomsel Smart Office",
-//                snippet = "Test Snippet",
-//            ){
-//
-//            }
         }
     }
 
 
 
+//    ExtendedFloatingActionButton(onClick = {
+//        markerList.removeAll{x->x.id != ""}
+//        markerList.add(LocationModel(
+//            id= "test123",
+//            latitude = -6.2273296,
+//            longitude = 106.8296376
+//        ))
+//    }){
+//        Text("Test")
+//    }
 
 }

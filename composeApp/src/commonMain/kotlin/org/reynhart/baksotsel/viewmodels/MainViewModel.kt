@@ -31,7 +31,7 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                 val retrievedUserModel = storageRepository.getUserData()
                 if(retrievedUserModel != null){
                     loginData = flow{
-                        while (true){
+//                        while (true){
                             emit(retrievedUserModel)
                             delay(15000)
                             val newModel = LoginUserModel(
@@ -43,7 +43,7 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                                 lastUpdate = Clock.System.now()
                             )
                             emit(newModel)
-                        }
+//                        }
 
                     }
                     _eventState.value = MainStates.MapLoaded
