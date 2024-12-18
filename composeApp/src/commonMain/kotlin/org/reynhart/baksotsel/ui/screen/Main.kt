@@ -44,15 +44,19 @@ import org.reynhart.baksotsel.viewmodels.states.MainStates
 fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
     var isShowLogoutDialog by remember { mutableStateOf(false) }
     val eventState by vm.eventState
-
+    lateinit var loginData : LoginUserModel
+    lateinit var locList: Flow<List<LoginUserModel>>
 
     if(eventState == MainStates.Clear){
         isShowLogoutDialog = false
         navController.navigate("Login")
     } else if(eventState == MainStates.MapLoaded){
-        val loginData = vm.loginData
+        loginData = vm.loginData
+        locList = vm.otherUserData
+
         GoogleMapView(
-            currentLoc = loginData
+            currentUser = loginData,
+            locList = locList
         )
     }
 
@@ -81,7 +85,7 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
             onDismissDialogBox = {},
             onSelectedItem ={ it ->
                 if(it == "ok"){
-                    vm.onLogoutClick()
+                    vm.onLogoutClick(loginData)
                 } else {
                     isShowLogoutDialog = false
                 }

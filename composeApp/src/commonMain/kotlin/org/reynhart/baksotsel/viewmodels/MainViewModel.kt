@@ -18,7 +18,8 @@ import org.reynhart.baksotsel.viewmodels.states.MainStates
 class MainViewModel(private val storageRepository: IStorageRepository): ViewModel() {
     private var _eventState : MutableState<MainStates> = mutableStateOf(MainStates.Init)
     val eventState: State<MainStates> = _eventState
-    lateinit var loginData: Flow<LoginUserModel>
+    lateinit var loginData: LoginUserModel
+    lateinit var otherUserData: Flow<List<LoginUserModel>>
 
     val dialogOptions = listOf<DialogModel>(
         DialogModel(label="OK", value = "ok", isPrimaryColor = true),
@@ -30,24 +31,29 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
             try {
                 val retrievedUserModel = storageRepository.getUserData()
                 if(retrievedUserModel != null){
-                    loginData = flow{
-//                        while (true){
-                            emit(retrievedUserModel)
-                            delay(15000)
-                            val newModel = LoginUserModel(
-                                id="test123",
-                                name="test",
-                                type="c",
-                                currentCoordinateLat = -6.224489,
-                                currentCoordinateLong = 106.7999732,
-                                lastUpdate = Clock.System.now()
-                            )
-                            emit(newModel)
-//                        }
-
-                    }
+                    loginData = retrievedUserModel
+//                    loginData = flow{
+////                        while (true){
+//                            emit(retrievedUserModel)
+////                            delay(15000)
+////                            val newModel = LoginUserModel(
+////                                id="test123",
+////                                name="test",
+////                                type="c",
+////                                currentCoordinateLat = -6.224489,
+////                                currentCoordinateLong = 106.7999732,
+////                                lastUpdate = Clock.System.now()
+////                            )
+////                            emit(newModel)
+////                        }
+//
+//                    }
+                    val otherUserModel = storageRepository.getUserDataStream()
+                    otherUserData = otherUserModel
                     _eventState.value = MainStates.MapLoaded
                 }
+
+
             }catch (e: Exception){
 
             }
@@ -55,9 +61,9 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
         }
     }
 
-    fun onLogoutClick(){
+    fun onLogoutClick(data: LoginUserModel){
         viewModelScope.launch {
-            storageRepository.clearUserData()
+            storageRepository.clearUserData(data)
             _eventState.value = MainStates.Clear
         }
 

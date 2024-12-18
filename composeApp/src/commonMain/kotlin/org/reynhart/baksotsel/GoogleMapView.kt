@@ -7,5 +7,6 @@ import org.reynhart.baksotsel.models.LoginUserModel
 
 @Composable
 expect fun GoogleMapView(
-    currentLoc: Flow<LoginUserModel>
+    currentUser: LoginUserModel,
+    locList: Flow<List<LoginUserModel>>
     )

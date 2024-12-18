@@ -24,26 +24,27 @@ import platform.UIKit.UIColor
 @OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun GoogleMapView(
-    currentLoc: Flow<LoginUserModel>
+    currentUser: LoginUserModel,
+    locList: Flow<List<LoginUserModel>>
 ){
 
     val markerList = remember{ mutableStateListOf<LocationModel>() }
 
-    LaunchedEffect(true){
-        currentLoc.collect{
-            val isAlreadyExist = markerList.firstOrNull{x-> x.id == it.id} != null
-            if(!isAlreadyExist){
-                markerList.add(
-                    LocationModel(
-                    id= it.id,
-                    latitude = it.currentCoordinateLat,
-                    longitude = it.currentCoordinateLong
-                )
-                )
-            }
-        }
-
-    }
+//    LaunchedEffect(true){
+//        locList.collect{
+//            val isAlreadyExist = markerList.firstOrNull{x-> x.id == it.id} != null
+//            if(!isAlreadyExist){
+//                markerList.add(
+//                    LocationModel(
+//                    id= it.id,
+//                    latitude = it.currentCoordinateLat,
+//                    longitude = it.currentCoordinateLong
+//                )
+//                )
+//            }
+//        }
+//
+//    }
 
     UIKitView(
         factory = {

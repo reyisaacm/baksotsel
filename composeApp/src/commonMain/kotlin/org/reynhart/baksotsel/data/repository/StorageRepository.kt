@@ -1,5 +1,6 @@
 package org.reynhart.baksotsel.data.repository
 
+import kotlinx.coroutines.flow.Flow
 import org.reynhart.baksotsel.data.interfaces.dataProvider.IDbStorage
 import org.reynhart.baksotsel.data.interfaces.dataProvider.ILocalStorage
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
@@ -19,8 +20,14 @@ class StorageRepository(
         return storageProvider.getUserData()
     }
 
-    override suspend fun clearUserData() {
+    override suspend fun clearUserData(data:LoginUserModel) {
         storageProvider.clearUserData()
+        dbStorageProvider.deleteData(data)
+    }
+
+    override suspend fun getUserDataStream(): Flow<List<LoginUserModel>> {
+        val flow = dbStorageProvider.getDataStream()
+        return flow
     }
 
 
