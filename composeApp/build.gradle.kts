@@ -100,7 +100,6 @@ kotlin {
             implementation(libs.dev.icerock.moko.permission.compose)
             implementation(libs.supabase.postgres)
             implementation(libs.supabase.realtime)
-
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.ios)

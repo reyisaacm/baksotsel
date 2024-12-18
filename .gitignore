@@ -18,4 +18,5 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 secrets.properties
 iosApp/Pods/*
-iosApp/iosApp/env.swift
+iosApp/env.swift
+composeApp/src/commonMain/kotlin/org/reynhart/baksotsel/Env.kt

@@ -57,7 +57,6 @@ supabase-realtime = {module="io.github.jan-tennert.supabase:realtime-kt", versio
 ktor-client-ios = {module="io.ktor:ktor-client-darwin", version.ref="ktor"}
 ktor-client-android = {module="io.ktor:ktor-client-cio", version.ref="ktor"}
 
-
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
