@@ -8,4 +8,5 @@ interface IStorageRepository {
     suspend fun getUserData():LoginUserModel?
     suspend fun clearUserData(data: LoginUserModel)
     suspend fun getUserDataStream():Flow<List<LoginUserModel>>
+    suspend fun sendUserLocation(data:LoginUserModel)
 }

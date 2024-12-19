@@ -7,4 +7,5 @@ interface IDbStorage {
     suspend fun storeData(data: LoginUserModel)
     suspend fun deleteData(data: LoginUserModel)
     suspend fun getDataStream(): Flow<List<LoginUserModel>>
+    suspend fun updateLocationData(data: LoginUserModel)
 }

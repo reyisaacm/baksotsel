@@ -5,15 +5,19 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
+import org.reynhart.baksotsel.getLocationUpdates
 import org.reynhart.baksotsel.models.DialogModel
+import org.reynhart.baksotsel.models.LocationModel
 import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.ui.screen.Main
 import org.reynhart.baksotsel.viewmodels.states.MainStates
@@ -23,6 +27,8 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
     val eventState: State<MainStates> = _eventState
     lateinit var loginData: LoginUserModel
     val markerList = mutableStateListOf<LoginUserModel>()
+    private var _updatedLocation = mutableStateOf<LocationModel>(LocationModel(id="0", longitude = 0.0, latitude = 0.0))
+    val updatedLocState: State<LocationModel> = _updatedLocation
 
     val dialogOptions = listOf<DialogModel>(
         DialogModel(label="OK", value = "ok", isPrimaryColor = true),
@@ -67,6 +73,17 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
 
             }
 
+        }
+
+        viewModelScope.launch {
+            val locationUpdates = getLocationUpdates()
+
+            locationUpdates.collect{
+                val lat = it.latitude
+                val long = it.longitude
+                _updatedLocation.value =  LocationModel(id="0", latitude =lat, longitude = long)
+
+            }
         }
     }
 

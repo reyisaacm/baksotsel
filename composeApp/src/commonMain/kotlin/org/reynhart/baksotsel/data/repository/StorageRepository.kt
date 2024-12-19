@@ -30,5 +30,9 @@ class StorageRepository(
         return flow
     }
 
+    override suspend fun sendUserLocation(data: LoginUserModel) {
+        dbStorageProvider.updateLocationData(data)
+    }
+
 
 }

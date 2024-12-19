@@ -33,3 +33,9 @@ actual suspend fun getCurrentLocation(): Flow<LocationModel> {
         }
    }
 }
+
+actual suspend fun getLocationUpdates(): Flow<LocationModel> {
+    return flow{
+        emit(LocationModel(id="", latitude = 0.0, longitude = 0.0))
+    }
+}

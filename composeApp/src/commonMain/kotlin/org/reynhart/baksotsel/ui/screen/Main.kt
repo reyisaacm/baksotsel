@@ -15,6 +15,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -47,6 +48,12 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
     var isShowLogoutDialog by remember { mutableStateOf(false) }
     val eventState by vm.eventState
     lateinit var loginData : LoginUserModel
+    val locState by vm.updatedLocState
+
+    LaunchedEffect(locState){
+        val lat = locState.latitude
+        val long = locState.longitude
+    }
 
     if(eventState == MainStates.Clear){
         navController.navigate("Login")

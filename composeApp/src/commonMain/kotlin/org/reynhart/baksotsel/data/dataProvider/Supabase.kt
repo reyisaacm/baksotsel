@@ -45,4 +45,21 @@ class Supabase: IDbStorage {
         return flow
 
     }
+
+    override suspend fun updateLocationData(data: LoginUserModel) {
+        supabase.from(userTableName).update({
+                set("currentCoordinateLat", data.currentCoordinateLat)
+            }) {
+            filter {
+                LoginUserModel::id eq data.id
+            }
+        }
+        supabase.from(userTableName).update({
+            set("currentCoordinateLong", data.currentCoordinateLong)
+        }) {
+            filter {
+                LoginUserModel::id eq data.id
+            }
+        }
+    }
 }
