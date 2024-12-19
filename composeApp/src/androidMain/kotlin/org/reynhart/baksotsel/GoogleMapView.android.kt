@@ -56,7 +56,7 @@ actual fun GoogleMapView(
     currentUser: LoginUserModel,
     locList: SnapshotStateList<LoginUserModel>
 ) {
-    val latLng: LatLng = LatLng(-6.2306647, 106.8148273)
+    val latLng: LatLng = LatLng(currentUser.currentCoordinateLat, currentUser.currentCoordinateLong)
     val cameraPositionState = rememberCameraPositionState {
         latLng.let { position = CameraPosition.fromLatLngZoom(it, 15f) }
     }

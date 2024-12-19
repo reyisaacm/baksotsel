@@ -37,6 +37,7 @@ import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.ui.theme.onPrimaryLight
 import org.reynhart.baksotsel.ui.theme.primaryLight
 import org.reynhart.baksotsel.ui.widgets.BaksoDialog
+import org.reynhart.baksotsel.ui.widgets.BaksoLoadingBox
 import org.reynhart.baksotsel.viewmodels.LoginViewModel
 import org.reynhart.baksotsel.viewmodels.MainViewModel
 import org.reynhart.baksotsel.viewmodels.states.MainStates
@@ -46,63 +47,34 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
     var isShowLogoutDialog by remember { mutableStateOf(false) }
     val eventState by vm.eventState
     lateinit var loginData : LoginUserModel
-    lateinit var locList: Flow<List<LoginUserModel>>
-    val coroutineScope = rememberCoroutineScope()
 
     if(eventState == MainStates.Clear){
-        isShowLogoutDialog = false
         navController.navigate("Login")
     } else if(eventState == MainStates.MapLoaded){
         loginData = vm.loginData
-        locList = vm.otherUserData
-        val markerList = remember{ mutableStateListOf<LoginUserModel>()}
-        coroutineScope.launch {
-            locList.collect{
-                for(user in it){
-//                    if(loginData.type != user.type && loginData.id != user.id){
-                        val userInList = markerList.firstOrNull{x-> x.id == user.id}
-                        if(userInList == null && user.isActive){ //if user does not exist in list and active
-                            markerList.add(user)
-                        } else if(userInList != null &&  user.isActive == false){ //if user exist in list and not active
-                            val indexToRemove = markerList.indexOfFirst { x-> x.id == user.id }
-                            markerList.removeAt(indexToRemove)
-//                        markerList.removeIf { x->x.id == user.id }
-                        } else  if(userInList != null && user.isActive){ //if user exist and not active
-                            val latCompare = (userInList.currentCoordinateLat == user.currentCoordinateLat)
-                            val longCompare = (userInList.currentCoordinateLong == user.currentCoordinateLong)
-                            if(latCompare && longCompare){ // location is still the same
-
-                            } else { //location changed
-//                            markerList.removeIf { x->x.id == user.id }
-                                val indexToRemove = markerList.indexOfFirst { x-> x.id == user.id }
-                                markerList.removeAt(indexToRemove)
-                                markerList.add(user)
-                            }
-                        }
-//                    }
-                }
-            }
-        }
         GoogleMapView(
             currentUser = loginData,
-            locList = markerList
+            locList = vm.markerList
         )
-    }
 
-    Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    isShowLogoutDialog = true
-                },
+        Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            Column(modifier = Modifier.padding(12.dp)) {
+                ExtendedFloatingActionButton(
+                    onClick = {
+                        isShowLogoutDialog = true
+                    },
 
-                icon = { Icon(Icons.Filled.Close, "Logout") },
-                text = { Text("Logout") },
-                containerColor = primaryLight,
-                contentColor = onPrimaryLight,
-            )
+                    icon = { Icon(Icons.Filled.Close, "Logout") },
+                    text = { Text("Logout") },
+                    containerColor = primaryLight,
+                    contentColor = onPrimaryLight,
+                )
+            }
+
         }
-
+    } else if (eventState == MainStates.LoggingOut){
+        isShowLogoutDialog = false
+        BaksoLoadingBox {  }
     }
 
 
