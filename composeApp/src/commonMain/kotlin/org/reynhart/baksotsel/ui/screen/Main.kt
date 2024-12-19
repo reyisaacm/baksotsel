@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,6 +47,7 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
     val eventState by vm.eventState
     lateinit var loginData : LoginUserModel
     lateinit var locList: Flow<List<LoginUserModel>>
+    val coroutineScope = rememberCoroutineScope()
 
     if(eventState == MainStates.Clear){
         isShowLogoutDialog = false
@@ -53,10 +55,37 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
     } else if(eventState == MainStates.MapLoaded){
         loginData = vm.loginData
         locList = vm.otherUserData
+        val markerList = remember{ mutableStateListOf<LoginUserModel>()}
+        coroutineScope.launch {
+            locList.collect{
+                for(user in it){
+//                    if(loginData.type != user.type && loginData.id != user.id){
+                        val userInList = markerList.firstOrNull{x-> x.id == user.id}
+                        if(userInList == null && user.isActive){ //if user does not exist in list and active
+                            markerList.add(user)
+                        } else if(userInList != null &&  user.isActive == false){ //if user exist in list and not active
+                            val indexToRemove = markerList.indexOfFirst { x-> x.id == user.id }
+                            markerList.removeAt(indexToRemove)
+//                        markerList.removeIf { x->x.id == user.id }
+                        } else  if(userInList != null && user.isActive){ //if user exist and not active
+                            val latCompare = (userInList.currentCoordinateLat == user.currentCoordinateLat)
+                            val longCompare = (userInList.currentCoordinateLong == user.currentCoordinateLong)
+                            if(latCompare && longCompare){ // location is still the same
 
+                            } else { //location changed
+//                            markerList.removeIf { x->x.id == user.id }
+                                val indexToRemove = markerList.indexOfFirst { x-> x.id == user.id }
+                                markerList.removeAt(indexToRemove)
+                                markerList.add(user)
+                            }
+                        }
+//                    }
+                }
+            }
+        }
         GoogleMapView(
             currentUser = loginData,
-            locList = locList
+            locList = markerList
         )
     }
 

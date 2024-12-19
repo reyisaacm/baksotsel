@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
 import cocoapods.GoogleMaps.GMSAdvancedMarker.Companion.markerImageWithColor
@@ -25,7 +26,7 @@ import platform.UIKit.UIColor
 @Composable
 actual fun GoogleMapView(
     currentUser: LoginUserModel,
-    locList: Flow<List<LoginUserModel>>
+    locList: SnapshotStateList<LoginUserModel>
 ){
 
     val markerList = remember{ mutableStateListOf<LocationModel>() }

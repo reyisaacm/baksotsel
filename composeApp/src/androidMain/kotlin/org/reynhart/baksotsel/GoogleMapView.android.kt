@@ -35,6 +35,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,7 @@ import org.reynhart.baksotsel.models.LoginUserModel
 @Composable
 actual fun GoogleMapView(
     currentUser: LoginUserModel,
-    locList: Flow<List<LoginUserModel>>
+    locList: SnapshotStateList<LoginUserModel>
 ) {
     val latLng: LatLng = LatLng(-6.2306647, 106.8148273)
     val cameraPositionState = rememberCameraPositionState {
@@ -68,31 +69,6 @@ actual fun GoogleMapView(
         )
     }
 
-    val markerList = remember{mutableStateListOf<LoginUserModel>()}
-    LaunchedEffect(Unit){
-            locList.collect{
-                for(user in it){
-                    val userInList = markerList.firstOrNull{x-> x.id == user.id}
-                    if(userInList == null && user.isActive){ //if user does not exist in list and active
-                        markerList.add(user)
-                    } else if(userInList != null &&  user.isActive == false){ //if user exist in list and not active
-                        markerList.removeIf { x->x.id == user.id }
-                    } else  if(userInList != null && user.isActive){ //if user exist and not active
-                        val latCompare = (userInList.currentCoordinateLat == user.currentCoordinateLat)
-                        val longCompare = (userInList.currentCoordinateLong == user.currentCoordinateLong)
-                        if(latCompare && longCompare){ // location is still the same
-
-                        } else { //location changed
-                            markerList.removeIf { x->x.id == user.id }
-                            markerList.add(user)
-                        }
-                    }
-
-                }
-            }
-
-    }
-
 //    LaunchedEffect(markerStateList.count()){
 //        println(markerStateList)
 //    }
@@ -105,7 +81,7 @@ actual fun GoogleMapView(
         cameraPositionState = cameraPositionState,
         uiSettings = mapUiSettings
     ) {
-        markerList.forEach{
+        locList.forEach{
             val markerState = MarkerState(
                 position = LatLng(it.currentCoordinateLat, it.currentCoordinateLong)
             )

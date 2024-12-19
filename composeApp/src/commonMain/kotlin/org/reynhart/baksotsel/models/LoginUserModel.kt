@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class LoginUserModel(
+data class LoginUserModel(
     val id: String,
     val name: String,
     val type: String,
