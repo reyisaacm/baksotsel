@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.Flow
 import org.reynhart.baksotsel.models.LocationModel
 import org.reynhart.baksotsel.models.LoginUserModel
 import platform.CoreLocation.CLLocationCoordinate2DMake
+import platform.Foundation.NSMutableArray
 import platform.UIKit.UIColor
 
 @OptIn(ExperimentalForeignApi::class)
@@ -29,7 +30,9 @@ actual fun GoogleMapView(
     locList: SnapshotStateList<LoginUserModel>
 ){
 
-    val markerList = remember{ mutableStateListOf<LocationModel>() }
+//    val nsMutableArray: NSMutableArray = locList as NSMutableArray
+//
+//    val markerList = remember{ mutableStateListOf<LocationModel>() }
 
 //    LaunchedEffect(true){
 //        locList.collect{
@@ -51,8 +54,8 @@ actual fun GoogleMapView(
         factory = {
             val camera: GMSCameraPosition=
                 GMSCameraPosition.cameraWithLatitude(
-                    latitude = -6.2274808,
-                    longitude = 106.8160314,
+                    latitude = currentUser.currentCoordinateLat,
+                    longitude = currentUser.currentCoordinateLong,
                     zoom = 15f
                 )
 
@@ -63,11 +66,11 @@ actual fun GoogleMapView(
             mapView.settings.zoomGestures = true
             mapView.settings.consumesGesturesInView = true
 
-            markerList.forEach {
+            locList.forEach {
                 GMSMarker().apply {
                     this.position = CLLocationCoordinate2DMake(
-                        latitude = it.latitude,
-                        longitude = it.longitude
+                        latitude = it.currentCoordinateLat,
+                        longitude = it.currentCoordinateLong
                     )
                     this.title = "Telkomsel Smart Office"
                     this.snippet = "Test Snippet"
