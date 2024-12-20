@@ -37,7 +37,7 @@ actual suspend fun getLocationUpdates(): Flow<LocationModel> {
     return callbackFlow {
         val client = LocationServices.getFusedLocationProviderClient(applicationContext)
         val locationRequest =
-            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, TimeUnit.SECONDS.toMillis(5)).build()
+            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, TimeUnit.SECONDS.toMillis(30)).build()
         val callBack = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
@@ -67,7 +67,7 @@ actual suspend fun getLocationUpdates(): Flow<LocationModel> {
         close(e)
     }
         awaitClose {
-//            client.removeLocationUpdates(callBack)
+            client.removeLocationUpdates(callBack)
         }
     }
 }

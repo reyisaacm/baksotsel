@@ -61,5 +61,12 @@ class Supabase: IDbStorage {
                 LoginUserModel::id eq data.id
             }
         }
+        supabase.from(userTableName).update({
+            set("lastUpdate", data.lastUpdate)
+        }) {
+            filter {
+                LoginUserModel::id eq data.id
+            }
+        }
     }
 }

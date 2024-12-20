@@ -2,6 +2,7 @@ package org.reynhart.baksotsel.viewmodels
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,8 +28,12 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
     val eventState: State<MainStates> = _eventState
     lateinit var loginData: LoginUserModel
     val markerList = mutableStateListOf<LoginUserModel>()
-    private var _updatedLocation = mutableStateOf<LocationModel>(LocationModel(id="0", longitude = 0.0, latitude = 0.0))
-    val updatedLocState: State<LocationModel> = _updatedLocation
+    var currentLatitude = mutableDoubleStateOf(0.0)
+    var currentLongitude = mutableDoubleStateOf(0.0)
+    var hasLocationChanged = mutableStateOf(false)
+
+//    private var _updatedLocation = mutableStateOf<LocationModel>(LocationModel(id="0", longitude = 0.0, latitude = 0.0))
+//    val updatedLocState: State<LocationModel> = _updatedLocation
 
     val dialogOptions = listOf<DialogModel>(
         DialogModel(label="OK", value = "ok", isPrimaryColor = true),
@@ -56,14 +61,14 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                                     markerList.removeAt(indexToRemove)
         //                        markerList.removeIf { x->x.id == user.id }
                                 } else  if(userInList != null && user.isActive){ //if user exist and active
-                                    val latCompare = (userInList.currentCoordinateLat == user.currentCoordinateLat)
-                                    val longCompare = (userInList.currentCoordinateLong == user.currentCoordinateLong)
-                                    if(!(latCompare && longCompare)){ // location has changed
+                                        val latCompare = (userInList.currentCoordinateLat == user.currentCoordinateLat)
+                                        val longCompare = (userInList.currentCoordinateLong == user.currentCoordinateLong)
+                                        if(!(latCompare && longCompare)){ // location has changed
                                             val indexToRemove = markerList.indexOfFirst { x-> x.id == user.id }
                                             markerList.removeAt(indexToRemove)
                                             markerList.add(user)
-
-                                    }
+                                            hasLocationChanged.value =true
+                                        }
                                 }
 
                         }
@@ -76,14 +81,40 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
         }
 
         viewModelScope.launch {
-            val locationUpdates = getLocationUpdates()
+            val retrievedUserModel = storageRepository.getUserData()
+            if(retrievedUserModel != null) {
+                if(retrievedUserModel.type == "tb"){ //lock customer position
+                    val locationUpdates = getLocationUpdates()
 
-            locationUpdates.collect{
-                val lat = it.latitude
-                val long = it.longitude
-                _updatedLocation.value =  LocationModel(id="0", latitude =lat, longitude = long)
+                    locationUpdates.collect{
+//                    val lat = it.latitude
+//                    val long = it.longitude
+//                    _updatedLocation.value =  LocationModel(id="0", latitude =lat, longitude = long)
+                        currentLatitude.value = it.latitude
+                        currentLongitude.value = it.longitude
+                        val updatedUserModel = LoginUserModel(
+                            id=retrievedUserModel.id,
+                            name = retrievedUserModel.name,
+                            currentCoordinateLat = it.latitude,
+                            currentCoordinateLong = it.longitude,
+                            type=retrievedUserModel.type,
+                            lastUpdate = Clock.System.now(),
+                            isActive = true
+                        )
+                        storageRepository.sendUserLocation(updatedUserModel)
+                        val latCompare = (it.latitude == retrievedUserModel.currentCoordinateLat)
+                        val longCompare = (it.longitude == retrievedUserModel.currentCoordinateLong)
+                        if(!(latCompare && longCompare)){ // location has changed
+                            val indexToRemove = markerList.indexOfFirst { x-> x.id == retrievedUserModel.id }
+                            markerList.removeAt(indexToRemove)
+                            markerList.add(updatedUserModel)
+                            hasLocationChanged.value =true
+                        }
+                    }
+                }
 
             }
+
         }
     }
 

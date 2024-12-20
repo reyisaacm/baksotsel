@@ -1,5 +1,6 @@
 package org.reynhart.baksotsel.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,9 +25,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import io.github.jan.supabase.realtime.Column
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -48,12 +51,12 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
     var isShowLogoutDialog by remember { mutableStateOf(false) }
     val eventState by vm.eventState
     lateinit var loginData : LoginUserModel
-    val locState by vm.updatedLocState
-
-    LaunchedEffect(locState){
-        val lat = locState.latitude
-        val long = locState.longitude
-    }
+//    val locState by vm.updatedLocState
+//
+//    LaunchedEffect(locState){
+//        val lat = locState.latitude
+//        val long = locState.longitude
+//    }
 
     if(eventState == MainStates.Clear){
         navController.navigate("Login")
@@ -77,8 +80,14 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
                     contentColor = onPrimaryLight,
                 )
             }
-
+//            Column (modifier = Modifier.background(Color.White)){
+//                Text("${vm.currentLatitude.value} -- ${vm.currentLongitude.value}")
+//            }
+//            Column (modifier = Modifier.background(Color.White)){
+//                Text("${vm.hasLocationChanged.value}")
+//            }
         }
+
     } else if (eventState == MainStates.LoggingOut){
         isShowLogoutDialog = false
         BaksoLoadingBox {  }
