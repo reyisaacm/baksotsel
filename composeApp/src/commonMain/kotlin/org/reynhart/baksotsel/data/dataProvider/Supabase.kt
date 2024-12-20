@@ -9,6 +9,7 @@ import io.github.jan.supabase.postgrest.query.filter.FilterOperator
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.realtime.selectAsFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Instant
 import org.reynhart.baksotsel.EnvVar
 import org.reynhart.baksotsel.data.interfaces.dataProvider.IDbStorage
 import org.reynhart.baksotsel.models.LoginUserModel
@@ -46,26 +47,29 @@ class Supabase: IDbStorage {
 
     }
 
-    override suspend fun updateLocationData(data: LoginUserModel) {
+    override suspend fun updateLocationData(id: String, latitude: Double, longitude: Double) {
         supabase.from(userTableName).update({
-                set("currentCoordinateLat", data.currentCoordinateLat)
-            }) {
+            set("currentCoordinateLat", latitude)
+        }) {
             filter {
-                LoginUserModel::id eq data.id
+                LoginUserModel::id eq id
             }
         }
         supabase.from(userTableName).update({
-            set("currentCoordinateLong", data.currentCoordinateLong)
+            set("currentCoordinateLong", longitude)
         }) {
             filter {
-                LoginUserModel::id eq data.id
+                LoginUserModel::id eq id
             }
         }
+    }
+
+    override suspend fun updateLastUpdate(id: String, timestamp: Instant) {
         supabase.from(userTableName).update({
-            set("lastUpdate", data.lastUpdate)
+            set("lastUpdate", timestamp)
         }) {
             filter {
-                LoginUserModel::id eq data.id
+                LoginUserModel::id eq id
             }
         }
     }

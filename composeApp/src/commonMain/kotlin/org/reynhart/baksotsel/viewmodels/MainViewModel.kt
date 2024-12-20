@@ -83,9 +83,9 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
         viewModelScope.launch {
             val retrievedUserModel = storageRepository.getUserData()
             if(retrievedUserModel != null) {
-                if(retrievedUserModel.type == "tb"){ //lock customer position
-                    val locationUpdates = getLocationUpdates()
+                val locationUpdates = getLocationUpdates()
 
+                if(retrievedUserModel.type == "tb"){ //tukang can update loc
                     locationUpdates.collect{
 //                    val lat = it.latitude
 //                    val long = it.longitude
@@ -101,7 +101,8 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                             lastUpdate = Clock.System.now(),
                             isActive = true
                         )
-                        storageRepository.sendUserLocation(updatedUserModel)
+                        storageRepository.sendUserLocation(id=updatedUserModel.id, latitude = updatedUserModel.currentCoordinateLat, longitude = updatedUserModel.currentCoordinateLong)
+                        storageRepository.sendLastUpdate(id=updatedUserModel.id, timestamp = updatedUserModel.lastUpdate!!)
                         val latCompare = (it.latitude == retrievedUserModel.currentCoordinateLat)
                         val longCompare = (it.longitude == retrievedUserModel.currentCoordinateLong)
                         if(!(latCompare && longCompare)){ // location has changed
@@ -110,6 +111,12 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                             markerList.add(updatedUserModel)
                             hasLocationChanged.value =true
                         }
+                    }
+                } else if(retrievedUserModel.type == "c"){ //customer only update lastUpdate
+                    locationUpdates.collect{
+                        currentLatitude.value = it.latitude
+                        currentLongitude.value = it.longitude
+                        storageRepository.sendLastUpdate(id=retrievedUserModel.id, timestamp = Clock.System.now())
                     }
                 }
 

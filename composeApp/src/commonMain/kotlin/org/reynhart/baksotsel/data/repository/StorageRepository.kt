@@ -1,6 +1,7 @@
 package org.reynhart.baksotsel.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.Instant
 import org.reynhart.baksotsel.data.interfaces.dataProvider.IDbStorage
 import org.reynhart.baksotsel.data.interfaces.dataProvider.ILocalStorage
 import org.reynhart.baksotsel.data.interfaces.repository.IStorageRepository
@@ -30,9 +31,14 @@ class StorageRepository(
         return flow
     }
 
-    override suspend fun sendUserLocation(data: LoginUserModel) {
-        dbStorageProvider.updateLocationData(data)
+    override suspend fun sendUserLocation(id: String, latitude: Double, longitude: Double) {
+        dbStorageProvider.updateLocationData(id, latitude, longitude)
     }
+
+    override suspend fun sendLastUpdate(id: String, timestamp: Instant) {
+        dbStorageProvider.updateLastUpdate(id, timestamp)
+    }
+
 
 
 }
