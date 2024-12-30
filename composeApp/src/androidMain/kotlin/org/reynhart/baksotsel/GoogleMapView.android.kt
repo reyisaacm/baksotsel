@@ -3,6 +3,7 @@ package org.reynhart.baksotsel
 import android.location.Location
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -58,7 +59,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.reynhart.baksotsel.models.LocationModel
 import org.reynhart.baksotsel.models.LoginUserModel
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 actual fun GoogleMapView(
     currentUser: LoginUserModel,
@@ -96,15 +100,21 @@ actual fun GoogleMapView(
 
             if(it.type == "c"){
                 var isClicked by remember { mutableStateOf(false) }
+                var randomGuid by remember { mutableStateOf(Uuid.random().toString()) }
                 MarkerComposable(
-                    keys = arrayOf(it.id),
+                    keys = arrayOf(it.id+randomGuid),
                     state = markerState,
                     onClick = {
                         isClicked = !isClicked
+                        randomGuid = Uuid.random().toString()
                         isClicked
-                    }
+                    },
+//                    onInfoWindowClick = {
+//                        isClicked = !isClicked
+//                        randomGuid = Uuid.random().toString()
+//                    },
                 ){
-                    Row {
+                    Column {
                         Column(modifier = Modifier.width(36.dp).height(36.dp).background(
                             color = Color.Red,
                             shape = CircleShape
@@ -117,14 +127,16 @@ actual fun GoogleMapView(
                                 modifier = Modifier.width(24.dp).height(24.dp)
                             )
                         }
-
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Column(modifier = Modifier.background(
-                                color = Color.White,
-                                shape = RoundedCornerShape(10.dp)
-                            ).padding(8.dp)) {
-                                Text(it.name)
+                            if(isClicked){
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Column(modifier = Modifier.background(
+                                    color = Color.White,
+                                    shape = RoundedCornerShape(10.dp)
+                                ).padding(8.dp)) {
+                                    Text(it.name)
+                                }
                             }
+
 
 
                     }

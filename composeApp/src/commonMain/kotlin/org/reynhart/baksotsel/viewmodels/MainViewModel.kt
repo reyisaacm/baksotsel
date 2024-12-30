@@ -111,12 +111,16 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                             markerList.add(updatedUserModel)
                             hasLocationChanged.value =true
                         }
+
                     }
                 } else if(retrievedUserModel.type == "c"){ //customer only update lastUpdate
                     locationUpdates.collect{
                         currentLatitude.value = it.latitude
                         currentLongitude.value = it.longitude
-                        storageRepository.sendLastUpdate(id=retrievedUserModel.id, timestamp = Clock.System.now())
+                        while(true){
+                            storageRepository.sendLastUpdate(id=retrievedUserModel.id, timestamp = Clock.System.now())
+                            delay(10000)
+                        }
                     }
                 }
 
