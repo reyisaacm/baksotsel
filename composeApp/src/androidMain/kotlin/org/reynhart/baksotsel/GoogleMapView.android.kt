@@ -52,6 +52,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerComposable
+import com.google.maps.android.compose.MarkerInfoWindow
+import com.google.maps.android.compose.MarkerInfoWindowComposable
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberMarkerState
 import kotlinx.coroutines.coroutineScope
@@ -93,28 +95,67 @@ actual fun GoogleMapView(
         cameraPositionState = cameraPositionState,
         uiSettings = mapUiSettings
     ) {
-        locList.forEach{
+        locList.forEach{user->
             val markerState = MarkerState(
-                position = LatLng(it.currentCoordinateLat, it.currentCoordinateLong)
+                position = LatLng(user.currentCoordinateLat, user.currentCoordinateLong)
             )
 
-            if(it.type == "c"){
-                var isClicked by remember { mutableStateOf(false) }
-                var randomGuid by remember { mutableStateOf(Uuid.random().toString()) }
-                MarkerComposable(
-                    keys = arrayOf(it.id+randomGuid),
-                    state = markerState,
-                    onClick = {
-                        isClicked = !isClicked
-                        randomGuid = Uuid.random().toString()
-                        isClicked
-                    },
-//                    onInfoWindowClick = {
+            if(user.type == "c"){
+//                var isClicked by remember { mutableStateOf(false) }
+//                var randomGuid by remember { mutableStateOf(Uuid.random().toString()) }
+//                MarkerComposable(
+//                    keys = arrayOf(it.id+randomGuid),
+//                    state = markerState,
+//                    onClick = {
 //                        isClicked = !isClicked
 //                        randomGuid = Uuid.random().toString()
+//                        isClicked
 //                    },
-                ){
-                    Column {
+////                    onInfoWindowClick = {
+////                        isClicked = !isClicked
+////                        randomGuid = Uuid.random().toString()
+////                    },
+//                ){
+//                    Column {
+//                        Column(modifier = Modifier.width(36.dp).height(36.dp).background(
+//                            color = Color.Red,
+//                            shape = CircleShape
+//                        ), verticalArrangement = Arrangement.Center,
+//                            horizontalAlignment = Alignment.CenterHorizontally) {
+//                            Icon(
+//                                imageVector = Icons.Filled.Person,
+//                                contentDescription = "Favorite Icon",
+//                                tint = Color.White,
+//                                modifier = Modifier.width(24.dp).height(24.dp)
+//                            )
+//                        }
+//                            if(isClicked){
+//                                Spacer(modifier = Modifier.width(4.dp))
+//                                Column(modifier = Modifier.background(
+//                                    color = Color.White,
+//                                    shape = RoundedCornerShape(10.dp)
+//                                ).padding(8.dp)) {
+//                                    Text(it.name)
+//                                }
+//                            }
+//
+//
+//
+//                    }
+//
+//
+//                }
+                MarkerInfoWindowComposable(
+                    state = markerState,
+                     infoContent = {
+                        Column(modifier = Modifier.background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(10.dp)
+                        ).padding(8.dp)) {
+                            Text(user.name)
+                        }
+                    },
+                    content = {
                         Column(modifier = Modifier.width(36.dp).height(36.dp).background(
                             color = Color.Red,
                             shape = CircleShape
@@ -127,25 +168,12 @@ actual fun GoogleMapView(
                                 modifier = Modifier.width(24.dp).height(24.dp)
                             )
                         }
-                            if(isClicked){
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Column(modifier = Modifier.background(
-                                    color = Color.White,
-                                    shape = RoundedCornerShape(10.dp)
-                                ).padding(8.dp)) {
-                                    Text(it.name)
-                                }
-                            }
-
-
-
                     }
 
-
-                }
+                )
             }
 
-            if(it.type == "tb"){
+            if(user.type == "tb"){
                 MarkerComposable(
                     state = markerState
                 ){
