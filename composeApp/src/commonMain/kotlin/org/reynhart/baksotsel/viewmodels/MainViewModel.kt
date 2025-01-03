@@ -102,7 +102,6 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                             isActive = true
                         )
                         storageRepository.sendUserLocation(id=updatedUserModel.id, latitude = updatedUserModel.currentCoordinateLat, longitude = updatedUserModel.currentCoordinateLong)
-                        storageRepository.sendLastUpdate(id=updatedUserModel.id, timestamp = updatedUserModel.lastUpdate!!)
                         val latCompare = (it.latitude == retrievedUserModel.currentCoordinateLat)
                         val longCompare = (it.longitude == retrievedUserModel.currentCoordinateLong)
                         if(!(latCompare && longCompare)){ // location has changed
@@ -112,15 +111,15 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
                             hasLocationChanged.value =true
                         }
 
+                            storageRepository.sendLastUpdate(id=updatedUserModel.id, timestamp = updatedUserModel.lastUpdate!!)
+
+
                     }
                 } else if(retrievedUserModel.type == "c"){ //customer only update lastUpdate
                     locationUpdates.collect{
                         currentLatitude.value = it.latitude
                         currentLongitude.value = it.longitude
-                        while(true){
-                            storageRepository.sendLastUpdate(id=retrievedUserModel.id, timestamp = Clock.System.now())
-                            delay(10000)
-                        }
+                        storageRepository.sendLastUpdate(id=retrievedUserModel.id, timestamp = Clock.System.now())
                     }
                 }
 
@@ -136,5 +135,12 @@ class MainViewModel(private val storageRepository: IStorageRepository): ViewMode
             _eventState.value = MainStates.Clear
         }
 
+    }
+
+    fun onSendLastUpdate(data: LoginUserModel){
+        viewModelScope.launch {
+            storageRepository.sendLastUpdate(id=data.id, timestamp = Clock.System.now())
+
+        }
     }
 }

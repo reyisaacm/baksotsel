@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.github.jan.supabase.realtime.Column
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -58,10 +59,18 @@ fun Main(navController: NavController,   vm: MainViewModel = koinViewModel()){
 //        val long = locState.longitude
 //    }
 
+
+
     if(eventState == MainStates.Clear){
         navController.navigate("Login")
     } else if(eventState == MainStates.MapLoaded){
         loginData = vm.loginData
+
+        LaunchedEffect(true){
+            vm.onSendLastUpdate(loginData)
+            delay(10000)
+        }
+
         GoogleMapView(
             currentUser = loginData,
             locList = vm.markerList
