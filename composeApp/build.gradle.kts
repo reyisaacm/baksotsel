@@ -100,6 +100,9 @@ kotlin {
             implementation(libs.dev.icerock.moko.permission.compose)
             implementation(libs.supabase.postgres)
             implementation(libs.supabase.realtime)
+            implementation(libs.connectivity.core)
+            implementation(libs.connectivity.device)
+            implementation(libs.connectivity.compose.device)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.ios)
