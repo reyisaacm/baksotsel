@@ -17,7 +17,7 @@ class MockSupabase: IDbStorage {
     }
 
     override suspend fun deleteData(data: LoginUserModel) {
-        userList.find{ x-> x.id == data.id }?.isActive = true
+        userList.find{ x-> x.id == data.id }?.isActive = false
     }
 
     @OptIn(SupabaseExperimental::class)
