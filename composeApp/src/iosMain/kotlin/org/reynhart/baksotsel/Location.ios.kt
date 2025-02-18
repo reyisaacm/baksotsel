@@ -39,3 +39,7 @@ actual suspend fun getLocationUpdates(): Flow<LocationModel> {
         emit(LocationModel(id="", latitude = 0.0, longitude = 0.0))
     }
 }
+
+actual fun checkIfGPSIsEnabled(): Boolean {
+    TODO("Not yet implemented")
+}

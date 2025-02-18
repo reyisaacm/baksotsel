@@ -10,8 +10,8 @@ data class LoginUserModel(
     val id: String,
     val name: String,
     val type: String,
-    val currentCoordinateLat: Double,
-    val currentCoordinateLong: Double,
-    val lastUpdate: Instant?,
-    val isActive: Boolean = true
+    var currentCoordinateLat: Double,
+    var currentCoordinateLong: Double,
+    var lastUpdate: Instant?,
+    var isActive: Boolean = true
 )

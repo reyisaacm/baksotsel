@@ -1,6 +1,8 @@
 package org.reynhart.baksotsel
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.location.LocationManager
 import android.os.Looper
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -46,11 +48,13 @@ actual suspend fun getLocationUpdates(): Flow<LocationModel> {
                     latitude = location.latitude,
                     longitude = location.longitude,
                     id = "0"
-                ) else LocationModel(
-                    latitude = 0.0,
-                    longitude = 0.0,
-                    id = "0"
-                )
+                ) else{
+                    LocationModel(
+                        latitude = 0.0,
+                        longitude = 0.0,
+                        id = "0"
+                    )
+                }
                 try {
                     this@callbackFlow.trySend(userLocation).isSuccess
 //                    client.removeLocationUpdates(this)
@@ -70,4 +74,9 @@ actual suspend fun getLocationUpdates(): Flow<LocationModel> {
             client.removeLocationUpdates(callBack)
         }
     }
+}
+
+actual fun checkIfGPSIsEnabled(): Boolean {
+    val locationManager = applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 }
