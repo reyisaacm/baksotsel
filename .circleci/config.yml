@@ -41,7 +41,7 @@ jobs:
 #            fastlane scan
 
 workflows:
-  build-all:
+  build-and-test:
     jobs:
       - build-android
 #      - build-ios
