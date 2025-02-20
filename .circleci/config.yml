@@ -43,5 +43,8 @@ jobs:
 workflows:
   build-and-test:
     jobs:
-      - build-android
+      - build-android:
+          filters:
+            tags:
+              only: /.*/
 #      - build-ios
