@@ -9,13 +9,13 @@ jobs:
 
     steps:
       - checkout
-      - android/restore-build-cache
-      - android/restore-gradle-cache
+      - android/restore_build_cache
+      - android/restore_gradle_cache
       - run:
           name: Run Android tests
           command: ./gradlew androidApp:testDebugUnitTest
-      - android/save-gradle-cache
-      - android/save-build-cache
+      - android/save_gradle_cache
+      - android/save_build_cache
 
 #  build-ios:
 #    macos:
