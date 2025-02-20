@@ -28,6 +28,7 @@ connectivity = "1.2.0"
 assertk = "0.28.1"
 coreKtx = "1.6.1"
 composeTest = "1.7.8"
+cryptography-kotlin="0.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -69,6 +70,9 @@ assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assert
 compose-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "composeTest" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeTest" }
 core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
+dev-whyoleg-cryptography-core={ module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography-kotlin" }
+dev-whyoleg-cryptography-apple={ module = "dev.whyoleg.cryptography:cryptography-provider-apple", version.ref = "cryptography-kotlin" }
+dev-whyoleg-cryptography-android={ module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography-kotlin" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

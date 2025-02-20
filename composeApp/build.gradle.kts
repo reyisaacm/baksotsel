@@ -79,6 +79,8 @@ kotlin {
             implementation(libs.androidx.startup.runtime)
             implementation(libs.gms.play.services.location)
             implementation(libs.ktor.client.android)
+            implementation(libs.dev.whyoleg.cryptography.android)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -104,6 +106,7 @@ kotlin {
             implementation(libs.connectivity.core)
             implementation(libs.connectivity.device)
             implementation(libs.connectivity.compose.device)
+            implementation(libs.dev.whyoleg.cryptography.core)
         }
 
         commonTest.dependencies {
@@ -118,6 +121,7 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.ktor.client.ios)
+            implementation(libs.dev.whyoleg.cryptography.apple)
         }
     }
 }
