@@ -44,8 +44,8 @@ import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
-import dev.jordond.connectivity.Connectivity
-import dev.jordond.connectivity.compose.rememberConnectivityState
+//import dev.jordond.connectivity.Connectivity
+//import dev.jordond.connectivity.compose.rememberConnectivityState
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
@@ -55,7 +55,7 @@ import org.reynhart.baksotsel.getCurrentLocation
 import org.reynhart.baksotsel.models.DialogModel
 import org.reynhart.baksotsel.models.LoginUserModel
 import org.reynhart.baksotsel.ui.theme.primaryLight
-import org.reynhart.baksotsel.ui.widgets.BaksoDeviceCheck
+//import org.reynhart.baksotsel.ui.widgets.BaksoDeviceCheck
 import org.reynhart.baksotsel.ui.widgets.BaksoDialog
 import org.reynhart.baksotsel.ui.widgets.BaksoDropdown
 import org.reynhart.baksotsel.ui.widgets.BaksoErrorBox
@@ -66,7 +66,7 @@ import org.reynhart.baksotsel.viewmodels.states.LoginStates
 
 @Composable
 fun Login(navController: NavController, vm: LoginViewModel= koinViewModel()){
-    BaksoDeviceCheck()
+//    BaksoDeviceCheck()
 
     var nameTxt by remember { mutableStateOf("") }
     var dropdownValue by remember { mutableStateOf("") }

@@ -1,5 +1,6 @@
 package org.reynhart.baksotsel
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,8 @@ import org.reynhart.baksotsel.models.LoginUserModel
 import platform.CoreLocation.CLLocationCoordinate2DMake
 import platform.Foundation.NSMutableArray
 import platform.UIKit.UIColor
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
@@ -49,43 +52,81 @@ actual fun GoogleMapView(
 //        }
 //
 //    }
+//    var listOfMarker = remember { mutableStateListOf<LoginUserModel>() }
+//    LaunchedEffect(locList){
+////        listOfMarker.clear()
+//        locList.forEach {
+//            listOfMarker.add(it)
+//        }
+//    }
 
-    UIKitView(
-        factory = {
-            val camera: GMSCameraPosition=
-                GMSCameraPosition.cameraWithLatitude(
-                    latitude = currentUser.currentCoordinateLat,
-                    longitude = currentUser.currentCoordinateLong,
-                    zoom = 15f
-                )
+    val camera: GMSCameraPosition=
+        GMSCameraPosition.cameraWithLatitude(
+            latitude = currentUser.currentCoordinateLat,
+            longitude = currentUser.currentCoordinateLong,
+            zoom = 15f
+        )
+    var locListCount = 0
 
+    val mapView =  GMSMapView()
+    //camera?.let { mapWithFrame(frame = mapView.frame, camera = it) }
+    mapView.camera=camera
+    mapView.settings.zoomGestures = true
+    mapView.settings.consumesGesturesInView = true
+    var factory = remember(GMSMapView) {
+        {mapView}
+    }
+    locList.forEach {
+        val marker = GMSMarker()
+        marker.position = CLLocationCoordinate2DMake(
+            latitude = it.currentCoordinateLat,
+            longitude = it.currentCoordinateLong
+        )
+        marker.title = ""
+        marker.snippet = ""
+        marker.map = mapView
+//        GMSMarker().apply {
+//            this.position = CLLocationCoordinate2DMake(
+//                latitude = it.currentCoordinateLat,
+//                longitude = it.currentCoordinateLong
+//            )
+//            this.title = "Telkomsel Smart Office"
+//            this.snippet = "Test Snippet"
+////            markerImageWithColor(UIColor.redColor)
+////                    this.markerImageWithColor(color = UIColor.redColor)
+//        }.map = mapView
+//
+//        GMSMarker().apply {
+//            this.position = CLLocationCoordinate2DMake(
+//                latitude = it.currentCoordinateLat+0.0005,
+//                longitude = it.currentCoordinateLong
+//            )
+//            this.title = "Telkomsel Smart Office"
+//            this.snippet = "Test Snippet"
+////            markerImageWithColor(UIColor.greenColor)
+////                    this.markerImageWithColor(color = UIColor.redColor)
+//        }.map = mapView
 
-            val mapView =  GMSMapView()
-            //camera?.let { mapWithFrame(frame = mapView.frame, camera = it) }
-            mapView.camera=camera
-            mapView.settings.zoomGestures = true
-            mapView.settings.consumesGesturesInView = true
-
-            locList.forEach {
-                GMSMarker().apply {
-                    this.position = CLLocationCoordinate2DMake(
-                        latitude = it.currentCoordinateLat,
-                        longitude = it.currentCoordinateLong
-                    )
-                    this.title = "Telkomsel Smart Office"
-                    this.snippet = "Test Snippet"
-                    markerImageWithColor(UIColor.redColor)
-//                    this.markerImageWithColor(color = UIColor.redColor)
-                }.map = mapView
-
-            }
-
-
-            mapView
-        },
-        modifier = Modifier.fillMaxSize(),
-        onRelease = {
-            it.removeFromSuperview()
+        factory = remember(GMSMapView) {
+            {mapView}
         }
-    )
+
+        UIKitView(
+            factory = factory,
+            modifier = Modifier.fillMaxSize(),
+            onRelease = {
+                it.removeFromSuperview()
+            },
+        )
+
+    }
+
+
+
+
+
+
+//    Column {
+//        Text("$locListCount")
+//    }
 }
